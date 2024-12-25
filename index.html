@@ -38,9 +38,14 @@
             border-bottom: 1px solid #ddd;
             font-size: 18px;
         }
-        .button-container {
+        .selection-container {
             text-align: center;
             margin: 20px;
+        }
+        .checkbox-group {
+            display: inline-block;
+            text-align: left;
+            margin: 10px;
         }
         button {
             padding: 10px 20px;
@@ -50,6 +55,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
         button:disabled {
             background-color: #ccc;
@@ -60,78 +66,44 @@
 <body>
     <h2>Reservierungsseiten</h2>
 
-    <div class="button-container">
-        <button id="loadPagesButton">Reservierungsseiten laden</button>
-        <button id="pressButtonsButton" style="display: none;">Alle Buttons in Frames drücken</button>
+    <div class="selection-container">
+        <div class="checkbox-group">
+            <label><input type="checkbox" value="36"> Küngsmattsaal</label><br>
+            <label><input type="checkbox" value="37"> Proberaum</label><br>
+            <label><input type="checkbox" value="38"> Mehrzweckraum</label><br>
+            <label><input type="checkbox" value="39"> Sitzungszimmer</label><br>
+            <label><input type="checkbox" value="40"> Foyer EG inkl. WC</label><br>
+            <label><input type="checkbox" value="41"> Küche inkl. Geschirr</label><br>
+            <label><input type="checkbox" value="42"> Außenanlage</label><br>
+            <label><input type="checkbox" value="43"> Bühne</label>
+        </div>
+        <button id="loadRooms">Ausgewählte Räume laden</button>
     </div>
 
-    <div id="reservationPages" style="display: none;">
-        <div class="section">
-            <h3>Küngsmattsaal</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=36&uuid=56CC55D8-3155-4592-A1E4D7427BD351E9"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Proberaum</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=37&uuid=AD3DEF1C-487A-48DC-A2A94B87EA0935A3"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Mehrzweckraum</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=38&uuid=1AE6D51E-3B76-4BF9-90E50C2DB5C47962"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Sitzungszimmer</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=39&uuid=852380C7-292D-4AD4-ABCFB5716D021B1D"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Foyer EG inkl. WC</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=40&uuid=E715876C-778F-4C13-97869A7A9C57FA55"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Küche inkl. Geschirr</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=41&uuid=C6FC4A75-3504-4847-B2DE377860450A0D"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Außenanlage</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=42&uuid=38577412-DAED-4150-9F2D850273D9CFFA"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Bühne</h3>
-            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=43&uuid=5051EEAB-4E78-48A8-87ECDCCF5A62830C"></iframe>
-        </div>
-    </div>
+    <div id="reservationPages"></div>
 
     <script>
-        document.getElementById('loadPagesButton').addEventListener('click', function() {
+        const roomData = {
+            "36": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=36&uuid=56CC55D8-3155-4592-A1E4D7427BD351E9",
+            "37": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=37&uuid=AD3DEF1C-487A-48DC-A2A94B87EA0935A3",
+            "38": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=38&uuid=1AE6D51E-3B76-4BF9-90E50C2DB5C47962",
+            "39": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=39&uuid=852380C7-292D-4AD4-ABCFB5716D021B1D",
+            "40": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=40&uuid=E715876C-778F-4C13-97869A7A9C57FA55",
+            "41": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=41&uuid=C6FC4A75-3504-4847-B2DE377860450A0D",
+            "42": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=42&uuid=38577412-DAED-4150-9F2D850273D9CFFA",
+            "43": "https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=43&uuid=5051EEAB-4E78-48A8-87ECDCCF5A62830C"
+        };
+
+        document.getElementById('loadRooms').addEventListener('click', function() {
+            const selectedRooms = document.querySelectorAll('input[type="checkbox"]:checked');
             const reservationPages = document.getElementById('reservationPages');
-            reservationPages.style.display = 'block';
 
-            const iframes = reservationPages.querySelectorAll('iframe');
-            iframes.forEach(iframe => {
-                iframe.src = iframe.getAttribute('data-src');
-            });
+            reservationPages.innerHTML = ""; // Lösche vorherige Inhalte
 
-            this.style.display = 'none';
-            document.getElementById('pressButtonsButton').style.display = 'inline-block';
-        });
-
-        document.getElementById('pressButtonsButton').addEventListener('click', function() {
-            const iframes = document.querySelectorAll('#reservationPages iframe');
-            iframes.forEach(iframe => {
-                try {
-                    const button = iframe.contentWindow.document.querySelector('.fc-button-content');
-                    if (button) {
-                        button.click();
-                    }
-                } catch (error) {
-                    console.error('Zugriff auf Frame nicht möglich:', error);
-                }
+            selectedRooms.forEach(room => {
+                const iframe = document.createElement('iframe');
+                iframe.src = roomData[room.value];
+                reservationPages.appendChild(iframe);
             });
         });
     </script>
