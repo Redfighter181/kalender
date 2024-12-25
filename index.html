@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservierungsseiten</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+            background-color: #0073e6;
+            color: white;
+            margin: 0;
+            padding: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #fff;
+        }
+        .section h3 {
+            margin: 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #0073e6;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h2>Reservierungsseiten</h2>
+
+    <div class="button-container">
+        <button id="loadPagesButton">Reservierungsseiten laden</button>
+        <button id="pressButtonsButton" style="display: none;">Alle Buttons in Frames drücken</button>
+    </div>
+
+    <div id="reservationPages" style="display: none;">
+        <div class="section">
+            <h3>Küngsmattsaal</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=36&uuid=56CC55D8-3155-4592-A1E4D7427BD351E9"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Proberaum</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=37&uuid=AD3DEF1C-487A-48DC-A2A94B87EA0935A3"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Mehrzweckraum</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=38&uuid=1AE6D51E-3B76-4BF9-90E50C2DB5C47962"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Sitzungszimmer</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=39&uuid=852380C7-292D-4AD4-ABCFB5716D021B1D"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Foyer EG inkl. WC</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=40&uuid=E715876C-778F-4C13-97869A7A9C57FA55"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Küche inkl. Geschirr</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=41&uuid=C6FC4A75-3504-4847-B2DE377860450A0D"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Außenanlage</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=42&uuid=38577412-DAED-4150-9F2D850273D9CFFA"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Bühne</h3>
+            <iframe src="" data-src="https://reservationen.sins.ch/xml_1/internet/de/file/modul/reservation3_2/detail.cfm?objID=43&uuid=5051EEAB-4E78-48A8-87ECDCCF5A62830C"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loadPagesButton').addEventListener('click', function() {
+            const reservationPages = document.getElementById('reservationPages');
+            reservationPages.style.display = 'block';
+
+            const iframes = reservationPages.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                iframe.src = iframe.getAttribute('data-src');
+            });
+
+            this.style.display = 'none';
+            document.getElementById('pressButtonsButton').style.display = 'inline-block';
+        });
+
+        document.getElementById('pressButtonsButton').addEventListener('click', function() {
+            const iframes = document.querySelectorAll('#reservationPages iframe');
+            iframes.forEach(iframe => {
+                try {
+                    const button = iframe.contentWindow.document.querySelector('.fc-button-content');
+                    if (button) {
+                        button.click();
+                    }
+                } catch (error) {
+                    console.error('Zugriff auf Frame nicht möglich:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
